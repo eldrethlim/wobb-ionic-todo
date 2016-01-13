@@ -1,0 +1,17 @@
+@mixin flex-parent($type) {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: -moz-flexbox;
+  flex-wrap: $type;
+  -webkit-flex-wrap: $type;
+  -moz-flex-wrap: $type;
+  -ms-flex-wrap: $type;
+}
+
+@mixin flex-child($fill, $width) {
+  flex: $fill 1 $width;
+  -webkit-flex: $fill 1 $width;
+  -moz-flex-wrap: $fill 1 $width;
+  -ms-flex: $fill 1 $width;
+}

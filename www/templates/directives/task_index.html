@@ -1,0 +1,13 @@
+<div id="task-lists">
+  <div class="list">
+    <div class="item item-button-right" ng-repeat="task in vm.tasks track by $index">
+      {{ task.description }}
+    <button class="button button-positive" ng-hide="task.complete" ng-click="vm.markTask(task, $index)">
+      <i class="icon ion-checkmark-round"></i>
+    </button>
+    <button class="button button-positive" ng-hide="!task.complete" ng-click="vm.markTask(task, $index)">
+      <i class="icon ion-close-round"></i>
+    </button>
+  </div>
+</div>
+</div>

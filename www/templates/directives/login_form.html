@@ -1,0 +1,15 @@
+<form name="loginForm">
+  <div class="list">
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Email</span>
+      <input type="text" placeholder="Email" required ng-model="user.email">
+    </label>
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Password</span>
+      <input type="password" placeholder="Password" required ng-model="user.password">
+    </label>
+    <div class="submit-box">
+      <button class="button button-positive" ng-click="vm.login(user)"> Log In </button>
+    </div>
+  </div>
+</form>

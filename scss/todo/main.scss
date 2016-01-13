@@ -1,0 +1,42 @@
+@import "components/flexbox";
+
+.center-align {
+  text-align: center;
+}
+
+.logout-box {
+  margin: 15px;
+}
+
+#home {
+  width: 50%;
+  margin: 50px auto;
+  text-align: center;
+
+  .navigation-buttons {
+    @include flex-parent(wrap);
+    justify-content: space-around;
+
+    .link {
+      margin: 15px;
+      @include flex-child(0, 250px);
+    }
+  }
+}
+
+#login, #register {
+  .submit-box {
+    margin: 20px;
+    text-align: center;
+  }
+}
+
+#new-task-box {
+  width: 90%;
+  margin: 25px auto;
+}
+
+.submit-box {
+  text-align: center;
+  margin-top: 5px;
+}

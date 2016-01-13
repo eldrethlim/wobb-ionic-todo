@@ -1,0 +1,11 @@
+<form name="taskForm">
+  <div class="list">
+    <label class="item item-input item-floating-label">
+      <span class="input-label">Description</span>
+      <input type="text" placeholder="Description" required ng-model="task.description">
+    </label>
+    <div class="submit-box">
+      <button class="button button-positive" ng-click="vm.createTask(task)"> Create Task</button>
+    </div>
+  </div>
+</form>
