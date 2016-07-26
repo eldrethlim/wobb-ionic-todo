@@ -23,8 +23,8 @@ function registerFormController($state, HttpService, User) {
   vm.register = registerUser
 
   function registerUser(credentials) {
-
-    HttpService.call('/api/v1/users', 'POST', credentials)
+    data = { user: credentials }
+    HttpService.call('/api/v1/users', 'POST', data)
       .then(registerResponseSuccess, registerResponseFailure)
   }
 

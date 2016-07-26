@@ -33,7 +33,7 @@ function taskListController(HttpService, Task, $scope) {
       .then(fetchTaskResponseSuccess, fetchTaskResponseFailure)
 
     function fetchTaskResponseSuccess(response) {
-      Task.list = response.data.tasks
+      Task.list = response.data
       console.log(Task.list)
       console.log(response.data)
     }

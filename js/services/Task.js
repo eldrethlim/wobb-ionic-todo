@@ -5,7 +5,7 @@ Task.$inject = []
 function Task() {
 
   var o = {}
-  o.list = undefined
+  o.list = []
 
   return o
 }

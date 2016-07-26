@@ -5,7 +5,7 @@ function loginForm() {
 
   var directive = {
     templateUrl: 'templates/directives/login_form.html',
-    restrict: 'E',
+    restrict: 'EA',
     scope: {},
     controller: 'loginFormController',
     controllerAs: 'vm',
@@ -23,8 +23,8 @@ function loginFormController($state, HttpService, User) {
   vm.login = loginUser
 
   function loginUser(credentials) {
-
-    HttpService.call('/api/v1/sessions', 'POST', credentials)
+    data = { user: credentials }
+    HttpService.call('/api/v1/sessions', 'POST', data)
       .then(loginResponseSuccess, loginResponseFailure)
   }
 

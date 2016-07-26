@@ -27,6 +27,66 @@ todo.constant('SERVER', {
 })
 
 todo.
+  config(applicationRoutes)
+
+applicationRoutes.$inject = ['$stateProvider', '$urlRouterProvider']
+
+function applicationRoutes($stateProvider, $urlRouterProvider) {
+  $stateProvider
+
+  .state('home', {
+    url: '/',
+    views: {
+      '': {
+        templateUrl: 'templates/home.html'
+      }
+    }
+  })
+
+  .state('login', {
+    url: '/login',
+    views: {
+      '': {
+        templateUrl: 'templates/login.html'
+      }
+    }
+  })
+
+  .state('register', {
+    url: '/register',
+    views: {
+      '': {
+        templateUrl: 'templates/register.html'
+      }
+    }
+  })
+
+  .state('taskboard', {
+    url: '/taskboard',
+    views: {
+      '': {
+        templateUrl: 'templates/taskboard.html'
+      }
+    },
+    resolve: {
+      checkSession: checkSession
+    }
+  })
+
+  $urlRouterProvider.otherwise('/')
+}
+
+checkSession.$inject = ['User', '$state']
+function checkSession(User, $state) {
+  User.checkSession().then(function(hasSession) {
+    if (!hasSession) {
+      console.log("Please log in.")
+      $state.go('home')
+    }
+  })
+}
+
+todo.
   directive('homeButton', homeButton)
 
 function homeButton() {
@@ -55,7 +115,7 @@ function loginForm() {
 
   var directive = {
     templateUrl: 'templates/directives/login_form.html',
-    restrict: 'E',
+    restrict: 'EA',
     scope: {},
     controller: 'loginFormController',
     controllerAs: 'vm',
@@ -73,8 +133,8 @@ function loginFormController($state, HttpService, User) {
   vm.login = loginUser
 
   function loginUser(credentials) {
-
-    HttpService.call('/api/v1/sessions', 'POST', credentials)
+    data = { user: credentials }
+    HttpService.call('/api/v1/sessions', 'POST', data)
       .then(loginResponseSuccess, loginResponseFailure)
   }
 
@@ -146,8 +206,8 @@ function registerFormController($state, HttpService, User) {
   vm.register = registerUser
 
   function registerUser(credentials) {
-
-    HttpService.call('/api/v1/users', 'POST', credentials)
+    data = { user: credentials }
+    HttpService.call('/api/v1/users', 'POST', data)
       .then(registerResponseSuccess, registerResponseFailure)
   }
 
@@ -187,13 +247,14 @@ function taskFormController(HttpService, Task) {
   vm.createTask = createTask
 
   function createTask(details) {
-
-    HttpService.call('/api/v1/tasks', 'POST', details)
+    data = { task: details }
+    HttpService.call('/api/v1/tasks', 'POST', data)
       .then(taskCreateSuccess, taskCreateFailure)
   }
 
   function taskCreateSuccess(response) {
-    Task.list.push(response.data.task)
+    Task.list.push(response.data)
+    console.log(Task.list)
     console.log(response.data.message)
   }
 
@@ -237,7 +298,7 @@ function taskListController(HttpService, Task, $scope) {
       .then(fetchTaskResponseSuccess, fetchTaskResponseFailure)
 
     function fetchTaskResponseSuccess(response) {
-      Task.list = response.data.tasks
+      Task.list = response.data
       console.log(Task.list)
       console.log(response.data)
     }
@@ -267,66 +328,6 @@ function taskListController(HttpService, Task, $scope) {
 }
 
 todo.
-  config(applicationRoutes)
-
-applicationRoutes.$inject = ['$stateProvider', '$urlRouterProvider']
-
-function applicationRoutes($stateProvider, $urlRouterProvider) {
-  $stateProvider
-
-  .state('home', {
-    url: '/',
-    views: {
-      '': {
-        templateUrl: 'templates/home.html'
-      }
-    }
-  })
-
-  .state('login', {
-    url: '/login',
-    views: {
-      '': {
-        templateUrl: 'templates/login.html'
-      }
-    }
-  })
-
-  .state('register', {
-    url: '/register',
-    views: {
-      '': {
-        templateUrl: 'templates/register.html'
-      }
-    }
-  })
-
-  .state('taskboard', {
-    url: '/taskboard',
-    views: {
-      '': {
-        templateUrl: 'templates/taskboard.html'
-      }
-    },
-    resolve: {
-      checkSession: checkSession
-    }
-  })
-
-  $urlRouterProvider.otherwise('/')
-}
-
-checkSession.$inject = ['User', '$state']
-function checkSession(User, $state) {
-  User.checkSession().then(function(hasSession) {
-    if (!hasSession) {
-      console.log("Please log in.")
-      $state.go('home')
-    }
-  })
-}
-
-todo.
   factory('HttpService', HttpService)
 
 HttpService.$inject = ['$http', 'SERVER', '$localStorage']
@@ -339,8 +340,9 @@ function HttpService($http, SERVER, $localStorage) {
   return o
 
   function httpCall(authRoute, method, data) {
-
-    var d = JSON.stringify(data)
+    if (data) {
+      data['format'] = 'json'
+    }
     var params = {
       method: method,
       url: SERVER.url + authRoute,
@@ -348,10 +350,9 @@ function HttpService($http, SERVER, $localStorage) {
         "Content-Type": "application/json",
         "Authorization": $localStorage.getObject('user').token
       },
-      data: d
+      data: JSON.stringify(data)
     }
     console.log(params)
-
     return $http(params).
       success(successResponse).
       error(failureResponse)
@@ -399,7 +400,7 @@ Task.$inject = []
 function Task() {
 
   var o = {}
-  o.list = undefined
+  o.list = []
 
   return o
 }
