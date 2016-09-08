@@ -168,14 +168,15 @@ function logoutButton() {
 }
 
 todo.controller('logoutButtonController', logoutButtonController)
-logoutButtonController.$inject = ['$state', 'User']
-function logoutButtonController($state, User) {
+logoutButtonController.$inject = ['$state', 'User', 'Task']
+function logoutButtonController($state, User, Task) {
 
   var vm = this
   vm.logout = logout
 
   function logout() {
     User.removeSession();
+    Task.list = []
     console.log("You've logged out")
     $state.go('home')
   }
