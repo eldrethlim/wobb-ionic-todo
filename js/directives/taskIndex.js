@@ -22,6 +22,7 @@ function taskListController(HttpService, Task, $scope) {
   var vm = this
   vm.tasks = undefined
   vm.markTask = markTask
+  vm.deleteTask = deleteTask
 
   $scope.$watch(function() { return Task.list }, function(oV, nV) {
     vm.tasks = Task.list
@@ -57,7 +58,23 @@ function taskListController(HttpService, Task, $scope) {
 
     function markTaskResponseFailure(response) {
       vm.index = undefined
-      console.log("error marking task")
+      console.log("Rrror marking task")
+    }
+  }
+
+  function deleteTask(task, index) {
+    vm.index = index;
+    HttpService.call('/api/v1/tasks/' + task.id, 'DELETE', undefined)
+      .then(deleteTaskResponseSuccess, deleteTaskResponseFailure)
+
+    function deleteTaskResponseSuccess(response) {
+      vm.tasks.splice(vm.index, 1)
+      vm.index = undefined
+      console.log(response.data.message)
+    }
+
+    function deleteTaskResponseFailure(response) {
+      console.log("Error deleting task")
     }
   }
 }
