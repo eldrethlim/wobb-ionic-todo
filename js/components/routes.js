@@ -35,6 +35,7 @@ function applicationRoutes($stateProvider, $urlRouterProvider) {
 
   .state('taskboard', {
     url: '/taskboard',
+    cache: false,
     views: {
       '': {
         templateUrl: 'templates/taskboard.html'

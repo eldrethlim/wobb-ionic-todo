@@ -16,8 +16,8 @@ function logoutButton() {
 }
 
 todo.controller('logoutButtonController', logoutButtonController)
-logoutButtonController.$inject = ['$state', 'User', 'Task']
-function logoutButtonController($state, User, Task) {
+logoutButtonController.$inject = ['$state', 'User', 'Task', '$ionicHistory']
+function logoutButtonController($state, User, Task, $ionicHistory) {
 
   var vm = this
   vm.logout = logout
@@ -27,5 +27,7 @@ function logoutButtonController($state, User, Task) {
     Task.list = [];
     console.log("You've logged out")
     $state.go('home')
+    $ionicHistory.clearHistory()
+    $ionicHistory.clearCache()
   }
 }
